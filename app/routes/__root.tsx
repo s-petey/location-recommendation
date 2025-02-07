@@ -150,11 +150,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <hr />
         {children}
 
-        {env.DEV_TOOLS && (
-          <React.Suspense fallback={null}>
-            <LazyDevTools />
-          </React.Suspense>
-        )}
+        {env.DEV_TOOLS && <LazyDevTools />}
         <Scripts />
       </body>
     </html>
@@ -174,8 +170,6 @@ const TanStackRouterDevtoolsProduction = React.lazy(() =>
 );
 
 function LazyDevTools() {
-  // TODO: Enable this via environment variable
-
   return (
     <React.Suspense fallback={null}>
       <ReactQueryDevtoolsProduction buttonPosition="bottom-left" />
