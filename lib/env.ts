@@ -18,8 +18,6 @@ const parsed = envSchema({
   // PRISMA_LOG_LEVEL: import.meta.env.VITE_PRISMA_LOG_LEVEL,
 });
 
-console.log({ parsed });
-
 if (parsed instanceof type.errors) {
   throw new Error(parsed.summary);
 }
