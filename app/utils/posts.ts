@@ -3,6 +3,8 @@ import { notFound } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/start';
 import { type } from 'arktype';
 
+const TWO_MINUTES = 1000 * 60 * 2;
+
 const postSchema = type({
   id: 'number',
   title: 'string',
@@ -16,6 +18,7 @@ export const postQueryOptions = (postId: string) =>
     queryKey: ['post', postId],
     queryFn: () => fetchPost({ data: postId }),
     persister: (data, ctx) => data(ctx),
+    staleTime: TWO_MINUTES,
   });
 
 const fetchPost = createServerFn({ method: 'GET' })
@@ -25,7 +28,7 @@ const fetchPost = createServerFn({ method: 'GET' })
     console.info(`Fetching post with id ${data}...`);
 
     const responseData = await fetch(
-      `https://jsonplaceholder.typicode.com/posts/${data}`
+      `https://jsonplaceholder.typicode.com/posts/${data}`,
     );
 
     if (responseData.status === 404) {
@@ -52,6 +55,7 @@ export const postsQueryOptions = () =>
     queryKey: ['posts'],
     queryFn: () => fetchPosts(),
     persister: (data, ctx) => data(ctx),
+    staleTime: TWO_MINUTES,
   });
 
 const fetchPosts = createServerFn({ method: 'GET' }).handler(async () => {
