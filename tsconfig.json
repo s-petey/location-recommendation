@@ -18,6 +18,7 @@
       "~/*": ["./app/*"],
       "~/lib/*": ["./lib/*"]
     },
-    "noEmit": true
+    "noEmit": true,
+    "types": ["vite/client"]
   }
 }
