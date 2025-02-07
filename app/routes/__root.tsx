@@ -9,7 +9,8 @@ import { getWebRequest } from '@tanstack/start/server';
 import * as React from 'react';
 import { DefaultCatchBoundary } from '~/components/DefaultCatchBoundary.js';
 import { NotFound } from '~/components/NotFound.js';
-import { auth } from '~/lib/auth';
+import { auth } from '~/lib/auth.js';
+import { env } from '~/lib/env.js';
 import appCss from '~/styles/app.css?url';
 import { seo } from '~/utils/seo.js';
 
@@ -110,14 +111,14 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   const data = Route.useLoaderData();
 
   return (
-    <html lang='en'>
+    <html lang="en">
       <head>
         <Meta />
       </head>
       <body>
-        <div className='p-2 flex gap-2 text-lg'>
+        <div className="p-2 flex gap-2 text-lg">
           <Link
-            to='/'
+            to="/"
             activeProps={{
               className: 'font-bold',
             }}
@@ -126,7 +127,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             Home
           </Link>{' '}
           <Link
-            to='/posts'
+            to="/posts"
             activeProps={{
               className: 'font-bold',
             }}
@@ -135,23 +136,25 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           >
             Posts
           </Link>
-          <div className='ml-auto'>
+          <div className="ml-auto">
             {data?.user ? (
               <>
-                <span className='mr-2'>{data.user.email}</span>
-                <Link to='/logout'>Logout</Link>
+                <span className="mr-2">{data.user.email}</span>
+                <Link to="/logout">Logout</Link>
               </>
             ) : (
-              <Link to='/login'>Login</Link>
+              <Link to="/login">Login</Link>
             )}
           </div>
         </div>
         <hr />
         {children}
 
-        <React.Suspense fallback={null}>
-          <LazyDevTools />
-        </React.Suspense>
+        {env.DEV_TOOLS && (
+          <React.Suspense fallback={null}>
+            <LazyDevTools />
+          </React.Suspense>
+        )}
         <Scripts />
       </body>
     </html>
@@ -161,13 +164,13 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 const ReactQueryDevtoolsProduction = React.lazy(() =>
   import('@tanstack/react-query-devtools').then((d) => ({
     default: d.ReactQueryDevtools,
-  }))
+  })),
 );
 
 const TanStackRouterDevtoolsProduction = React.lazy(() =>
   import('@tanstack/router-devtools').then((d) => ({
     default: d.TanStackRouterDevtools,
-  }))
+  })),
 );
 
 function LazyDevTools() {
@@ -175,8 +178,8 @@ function LazyDevTools() {
 
   return (
     <React.Suspense fallback={null}>
-      <ReactQueryDevtoolsProduction buttonPosition='bottom-left' />
-      <TanStackRouterDevtoolsProduction position='bottom-right' />
+      <ReactQueryDevtoolsProduction buttonPosition="bottom-left" />
+      <TanStackRouterDevtoolsProduction position="bottom-right" />
     </React.Suspense>
   );
 }

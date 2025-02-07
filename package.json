@@ -2,6 +2,9 @@
   "name": "location-recommendation",
   "sideEffects": false,
   "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "dev": "vinxi dev",
     "build": "tsc --noEmit && vinxi build",
