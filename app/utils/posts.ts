@@ -22,13 +22,21 @@ export const postQueryOptions = (postId: string) =>
   });
 
 const fetchPost = createServerFn({ method: 'GET' })
-  // TODO: Validator
-  .validator((postId: string) => postId)
-  .handler(async ({ data }) => {
-    console.info(`Fetching post with id ${data}...`);
+  .validator((postId: string) => {
+    const parsed = type('string >= 1')(postId);
+
+    if (parsed instanceof type.errors) {
+      console.error('parseError: ', parsed.summary);
+      throw new Error(parsed.summary);
+    }
+
+    return parsed;
+  })
+  .handler(async ({ data: postId }) => {
+    console.info(`Fetching post with id ${postId}...`);
 
     const responseData = await fetch(
-      `https://jsonplaceholder.typicode.com/posts/${data}`,
+      `https://jsonplaceholder.typicode.com/posts/${postId}`,
     );
 
     if (responseData.status === 404) {
