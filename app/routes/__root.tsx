@@ -11,7 +11,6 @@ import { DefaultCatchBoundary } from '~/components/DefaultCatchBoundary.js';
 import { NotFound } from '~/components/NotFound.js';
 import { auth } from '~/lib/auth.js';
 import { env } from '~/lib/env.js';
-// @ts-ignore -- I'm not sure why it is erroring on importing css files.
 import appCss from '~/styles/app.css?url';
 import { seo } from '~/utils/seo.js';
 
