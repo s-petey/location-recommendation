@@ -6,8 +6,8 @@ import { type } from 'arktype';
 import { Auth } from '~/components/Auth';
 import { auth } from '~/lib/auth';
 import {
-  createCookieForServerAuth,
   type EmailAuth,
+  createCookieForServerAuth,
   emailAuthSchema,
 } from '~/lib/auth.helpers';
 
@@ -90,7 +90,7 @@ function LoginComp() {
 
   return (
     <Auth
-      actionText='Login'
+      actionText="Login"
       status={loginMutation.status}
       onSubmit={(e) => {
         const formData = new FormData(e.target as HTMLFormElement);
@@ -105,7 +105,7 @@ function LoginComp() {
       afterSubmit={
         loginMutation.error?.message ? (
           <>
-            <div className='text-red-400'>{loginMutation.error?.message}</div>
+            <div className="text-red-400">{loginMutation.error?.message}</div>
           </>
         ) : null
       }

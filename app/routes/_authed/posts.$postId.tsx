@@ -7,7 +7,7 @@ import { postQueryOptions } from '~/utils/posts.js';
 export const Route = createFileRoute('/_authed/posts/$postId')({
   loader: async ({ params: { postId }, context }) => {
     const data = await context.queryClient.ensureQueryData(
-      postQueryOptions(postId)
+      postQueryOptions(postId),
     );
 
     return {
@@ -33,9 +33,9 @@ function PostComponent() {
   const postQuery = useSuspenseQuery(postQueryOptions(postId));
 
   return (
-    <div className='space-y-2'>
-      <h4 className='text-xl font-bold underline'>{postQuery.data.title}</h4>
-      <div className='text-sm'>{postQuery.data.body}</div>
+    <div className="space-y-2">
+      <h4 className="text-xl font-bold underline">{postQuery.data.title}</h4>
+      <div className="text-sm">{postQuery.data.body}</div>
     </div>
   );
 }

@@ -3,13 +3,13 @@ import { createFileRoute, redirect, useRouter } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/start';
 import { getEvent, setCookie } from '@tanstack/start/server';
 import { type } from 'arktype';
-import { Auth } from '~/components/Auth';
-import { auth } from '~/lib/auth';
+import { Auth } from '~/components/Auth.jsx';
 import {
-  createCookieForServerAuth,
   type EmailAuth,
+  createCookieForServerAuth,
   emailAuthSchema,
-} from '~/lib/auth.helpers';
+} from '~/lib/auth.helpers.js';
+import { auth } from '~/lib/auth.js';
 
 export const signupFn = createServerFn()
   .validator((data: EmailAuth) => {
@@ -82,7 +82,7 @@ function SignupComp() {
 
   return (
     <Auth
-      actionText='Sign Up'
+      actionText="Sign Up"
       status={signupMutation.status}
       onSubmit={(e) => {
         const formData = new FormData(e.target as HTMLFormElement);
@@ -97,7 +97,7 @@ function SignupComp() {
       afterSubmit={
         signupMutation.error ? (
           <>
-            <div className='text-red-400'>{signupMutation.error.message}</div>
+            <div className="text-red-400">{signupMutation.error.message}</div>
           </>
         ) : null
       }
