@@ -31,7 +31,6 @@
     "prisma": "^5.22.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "redaxios": "^0.5.1",
     "tailwind-merge": "^2.6.0",
     "vinxi": "0.5.1"
   },

@@ -1,13 +1,15 @@
 import { queryOptions } from '@tanstack/react-query';
 import { notFound } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/start';
-import axios from 'redaxios';
+import { type } from 'arktype';
 
-export type PostType = {
-  id: string;
-  title: string;
-  body: string;
-};
+const postSchema = type({
+  id: 'number',
+  title: 'string',
+  body: 'string',
+});
+
+export type PostType = typeof postSchema.infer;
 
 export const postQueryOptions = (postId: string) =>
   queryOptions({
@@ -17,21 +19,32 @@ export const postQueryOptions = (postId: string) =>
   });
 
 const fetchPost = createServerFn({ method: 'GET' })
+  // TODO: Validator
   .validator((postId: string) => postId)
   .handler(async ({ data }) => {
     console.info(`Fetching post with id ${data}...`);
-    const post = await axios
-      .get<PostType>(`https://jsonplaceholder.typicode.com/posts/${data}`)
-      .then((r) => r.data)
-      .catch((err) => {
-        console.error(err);
-        if (err.status === 404) {
-          throw notFound();
-        }
-        throw err;
-      });
 
-    return post;
+    const responseData = await fetch(
+      `https://jsonplaceholder.typicode.com/posts/${data}`
+    );
+
+    if (responseData.status === 404) {
+      throw notFound();
+    }
+
+    if (!responseData.ok) {
+      throw new Error('Failed to fetch post');
+    }
+
+    const json = await responseData.json();
+
+    const parsed = postSchema(json);
+
+    if (parsed instanceof type.errors) {
+      throw new Error(parsed.summary);
+    }
+
+    return parsed;
   });
 
 export const postsQueryOptions = () =>
@@ -44,7 +57,22 @@ export const postsQueryOptions = () =>
 const fetchPosts = createServerFn({ method: 'GET' }).handler(async () => {
   console.info('Fetching posts...');
   await new Promise((r) => setTimeout(r, 1000));
-  return axios
-    .get<Array<PostType>>('https://jsonplaceholder.typicode.com/posts')
-    .then((r) => r.data.slice(0, 10));
+
+  const data = await fetch('https://jsonplaceholder.typicode.com/posts');
+
+  if (!data.ok) {
+    throw new Error('Failed to fetch posts');
+  }
+
+  const json = await data.json();
+
+  const take10 = Array.isArray(json) ? json.slice(0, 10) : [];
+
+  const parsed = postSchema.array()(take10);
+
+  if (parsed instanceof type.errors) {
+    throw new Error(parsed.summary);
+  }
+
+  return parsed.slice(0, 10);
 });
