@@ -116,7 +116,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <Meta />
       </head>
       <body>
-        <div className="p-2 flex gap-2 text-lg">
+        <div className="flex gap-2 p-2 text-lg">
           <Link
             to="/"
             activeProps={{
@@ -127,6 +127,16 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             Home
           </Link>{' '}
           <Link
+            to="/category"
+            activeProps={{
+              className: 'font-bold',
+            }}
+            disabled={!data?.user}
+            className={!data?.user ? 'pointer-events-none opacity-50' : ''}
+          >
+            Category
+          </Link>{' '}
+          <Link
             to="/posts"
             activeProps={{
               className: 'font-bold',
@@ -135,7 +145,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             className={!data?.user ? 'pointer-events-none opacity-50' : ''}
           >
             Posts
-          </Link>
+          </Link>{' '}
           <div className="ml-auto">
             {data?.user ? (
               <>
