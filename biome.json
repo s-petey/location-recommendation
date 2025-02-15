@@ -32,6 +32,13 @@
             }
           }
         }
+      },
+      "nursery": {
+        "useSortedClasses": {
+          "fix": "safe",
+          "options": {},
+          "level": "error"
+        }
       }
     }
   },
