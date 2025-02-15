@@ -22,12 +22,14 @@ function RouteComponent() {
   const [formState, setFormState] = useState<{
     category: string;
     limit: number;
-    longLat: [number, number] | null;
+    longitude: number | null;
+    latitude: number | null;
     radius: number;
   }>({
     category: '',
     limit: 1,
-    longLat: null,
+    longitude: null,
+    latitude: null,
     radius: 3,
   });
 
@@ -43,7 +45,8 @@ function RouteComponent() {
 
     setFormState((prev) => ({
       ...prev,
-      longLat: [longitude, latitude],
+      latitude,
+      longitude,
     }));
   };
 
@@ -61,7 +64,13 @@ function RouteComponent() {
         className="grid grid-cols-1 gap-4"
         onSubmit={(event) => {
           event.preventDefault();
-          const { category: rawCategory, limit, longLat, radius } = formState;
+          const {
+            category: rawCategory,
+            limit,
+            longitude,
+            latitude,
+            radius,
+          } = formState;
 
           const category = categorySchema(rawCategory);
 
@@ -72,7 +81,12 @@ function RouteComponent() {
             return;
           }
 
-          if (!longLat) {
+          if (
+            typeof longitude !== 'number' ||
+            typeof latitude !== 'number' ||
+            Number.isNaN(longitude) ||
+            Number.isNaN(latitude)
+          ) {
             setErrors({
               proximity: 'Proximity is required',
             });
@@ -99,13 +113,16 @@ function RouteComponent() {
 
           setErrors({});
 
+          const proximity: [number, number] = [longitude, latitude];
+
           navigate({
             to: '/category/$name',
             params: { name: category },
             search: () => ({
               category,
-              proximity: longLat,
+              proximity,
               limit: result.limit,
+              radius,
             }),
           });
         }}
@@ -141,7 +158,26 @@ function RouteComponent() {
               name="longitude"
               id="longitude"
               required={true}
-              value={formState.longLat?.at(0) ?? ''}
+              value={formState.longitude ?? ''}
+              onChange={(event) => {
+                const longitude = Number(event.target.value);
+
+                if (Number.isNaN(longitude)) {
+                  setErrors({
+                    proximity: 'Invalid longitude',
+                  });
+                  return;
+                }
+
+                setErrors({
+                  proximity: undefined,
+                });
+
+                setFormState((prev) => ({
+                  ...prev,
+                  longitude,
+                }));
+              }}
             />
           </label>
           <label htmlFor="latitude">
@@ -152,7 +188,26 @@ function RouteComponent() {
               name="latitude"
               id="latitude"
               required={true}
-              value={formState.longLat?.at(1) ?? ''}
+              value={formState.latitude ?? ''}
+              onChange={(event) => {
+                const latitude = Number(event.target.value);
+
+                if (Number.isNaN(latitude)) {
+                  setErrors({
+                    proximity: 'Invalid latitude',
+                  });
+                  return;
+                }
+
+                setErrors({
+                  proximity: undefined,
+                });
+
+                setFormState((prev) => ({
+                  ...prev,
+                  latitude,
+                }));
+              }}
             />
           </label>
         </div>

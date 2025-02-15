@@ -1,13 +1,8 @@
-import * as turf from '@turf/turf';
-import {
-  queryOptions,
-  skipToken,
-  useSuspenseQuery,
-} from '@tanstack/react-query';
-import { createFileRoute, notFound, useNavigate } from '@tanstack/react-router';
+import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
+import { createFileRoute, notFound } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/start';
+import * as turf from '@turf/turf';
 import { type } from 'arktype';
-import { useState } from 'react';
 import {
   type FetchSearchbox,
   categorySchema,
@@ -15,7 +10,6 @@ import {
   searchboxQuerySchema,
   searchboxSchema,
 } from '~/lib/category';
-import { env } from '~/lib/env';
 
 export const Route = createFileRoute('/_authed/category/$name')({
   loaderDeps: ({ search }) => search,
@@ -138,7 +132,7 @@ const fetchSearchbox = createServerFn({ method: 'GET' })
 
     const json = await responseData.json();
 
-    console.log({ json });
+    // console.log({ json });
 
     const parsed = searchboxSchema(json);
 
