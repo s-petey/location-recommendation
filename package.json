@@ -27,6 +27,7 @@
     "@tanstack/react-router-with-query": "^1.99.0",
     "@tanstack/router-devtools": "^1.99.0",
     "@tanstack/start": "^1.99.1",
+    "@turf/turf": "^7.2.0",
     "arktype": "^2.0.4",
     "better-auth": "^1.1.15",
     "prisma": "^5.22.0",

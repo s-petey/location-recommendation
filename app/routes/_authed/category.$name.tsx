@@ -1,3 +1,4 @@
+import * as turf from '@turf/turf';
 import {
   queryOptions,
   skipToken,
@@ -92,7 +93,17 @@ const fetchSearchbox = createServerFn({ method: 'GET' })
     return parsed;
   })
   .handler(async ({ data }) => {
-    const { category, limit, proximity } = data;
+
+    const { category, radius, limit, proximity } = data;
+    const turfPoint = turf.point(proximity);
+    const buffer = turf.buffer(turfPoint, radius, { units: 'kilometers' });
+
+    if (!buffer) {
+      throw new Error('Failed to create bbox');
+    }
+
+    const bbox = turf.bbox(buffer);
+
 
     // The category needs to be an `_` separated string instead of spaces.
     const underscoredCategory = category.replaceAll(' ', '_');
@@ -104,8 +115,12 @@ const fetchSearchbox = createServerFn({ method: 'GET' })
       'access_token',
       'pk.eyJ1Ijoicy1wZXRleSIsImEiOiJjbTZtZWN6ZWcwamd4Mm1wYjI5MGVmYmJrIn0.PvkJ6F2ngc9_iTBBuRB4nw',
     );
-    fetchUrl.searchParams.set('limit', limit.toString());
+
+    // TODO: This is currently a magic number (see form too)
+    const fetchLimit = limit * 5 < 25 ? limit * 5 : 25;
+    fetchUrl.searchParams.set('limit', fetchLimit.toString());
     fetchUrl.searchParams.set('proximity', proximity.join(','));
+    fetchUrl.searchParams.set('bbox', bbox.join(','));
 
     console.info('Fetching: ', fetchUrl.toString());
 
@@ -131,7 +146,17 @@ const fetchSearchbox = createServerFn({ method: 'GET' })
       throw new Error(parsed.summary);
     }
 
-    return parsed;
+    // Get a random subset of the results
+    // TODO: Testing
+    const features = parsed.features;
+    const randomSubsetFeatures = features
+      .sort(() => Math.random() - 0.5)
+      .slice(0, limit);
+
+    return {
+      ...parsed,
+      features: randomSubsetFeatures,
+    };
   });
 
 function searchboxQueryOptions(params: Partial<FetchSearchbox>) {
@@ -139,7 +164,12 @@ function searchboxQueryOptions(params: Partial<FetchSearchbox>) {
     queryKey: [
       'search',
       'searchbox',
-      { category: params.category, proximity: params.proximity },
+      {
+        category: params.category,
+        proximity: params.proximity,
+        limit: params.limit,
+        radius: params.radius,
+      },
     ],
     queryFn: () => {
       const parsed = searchBoxParamsSchema(params);
@@ -151,13 +181,14 @@ function searchboxQueryOptions(params: Partial<FetchSearchbox>) {
         return null;
       }
 
-      const { category, limit, proximity } = parsed;
+      const { category, limit, radius, proximity } = parsed;
 
       return fetchSearchbox({
         data: {
           category,
           limit,
           proximity,
+          radius,
         },
       });
     },

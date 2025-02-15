@@ -6,6 +6,7 @@ const searchBoxParamsSchema = type({
   category: categorySchema,
   limit: 'number',
   proximity: type(['number', 'number']).describe('[longitude, latitude]'),
+  radius: 'number = 3',
 });
 
 const searchboxQuerySchema = type({
@@ -49,10 +50,10 @@ const featureSchema = type({
         name: 'string',
         address_number: 'string',
         street_name: 'string',
-      }),
+      }).optional(),
       street: type({
         name: 'string',
-      }),
+      }).optional(),
     }).optional(),
     coordinates: type({
       latitude: 'number',
@@ -75,7 +76,7 @@ const featureSchema = type({
       dataplor: 'string',
     }),
     metadata: type({
-      phone: 'string',
+      'phone?': 'string',
       open_hours: type({
         periods: type({
           open: type({
@@ -87,7 +88,7 @@ const featureSchema = type({
             time: 'string',
           }),
         }).array(),
-      }),
+      }).optional(),
     }),
   }),
 });
