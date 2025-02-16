@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { createFileRoute, redirect, useRouter } from '@tanstack/react-router';
+import { createFileRoute, Link, useRouter } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/start';
 import { getEvent, setCookie } from '@tanstack/start/server';
 import { type } from 'arktype';
@@ -10,6 +10,7 @@ import {
   emailAuthSchema,
 } from '~/lib/auth.helpers.js';
 import { auth } from '~/lib/auth.js';
+import { env } from '~/lib/env';
 
 export const signupFn = createServerFn()
   .validator((data: EmailAuth) => {
@@ -24,34 +25,29 @@ export const signupFn = createServerFn()
     return result;
   })
   .handler(async ({ data }) => {
-    try {
-      const signUpResponse = await auth.api.signUpEmail({
-        body: {
-          email: data.email,
-          password: data.password,
-          name: data.email,
-        },
-        asResponse: true,
-      });
-
-      const headers = signUpResponse.headers;
-
-      const cookiesToSet = createCookieForServerAuth(headers);
-      const event = getEvent();
-
-      for (const { key, value, options } of cookiesToSet) {
-        setCookie(event, key, value, options);
-      }
-    } catch (error) {
-      console.error(error);
-
-      return {
-        error: true,
-        message: error instanceof Error ? error.message : 'Unknown error',
-      };
+    if (!env.VITE_ALLOWED_EMAILS.includes(data.email)) {
+      throw new Error('Email not allowed - contact website owner.');
     }
 
-    const to = data.redirectUrl || '/';
+    const signUpResponse = await auth.api.signUpEmail({
+      body: {
+        email: data.email,
+        password: data.password,
+        name: data.email,
+      },
+      asResponse: true,
+    });
+
+    const headers = signUpResponse.headers;
+
+    const cookiesToSet = createCookieForServerAuth(headers);
+    const event = getEvent();
+
+    for (const { key, value, options } of cookiesToSet) {
+      setCookie(event, key, value, options);
+    }
+
+    const to = data.redirectUrl || '/category';
 
     return { to };
 
@@ -81,26 +77,40 @@ function SignupComp() {
   });
 
   return (
-    <Auth
-      actionText="Sign Up"
-      status={signupMutation.status}
-      onSubmit={(e) => {
-        const formData = new FormData(e.target as HTMLFormElement);
+    <>
+      <Auth
+        actionText="Sign Up"
+        status={signupMutation.status}
+        onSubmit={(e) => {
+          const formData = new FormData(e.target as HTMLFormElement);
 
-        signupMutation.mutate({
-          data: {
-            email: formData.get('email') as string,
-            password: formData.get('password') as string,
-          },
-        });
-      }}
-      afterSubmit={
-        signupMutation.error ? (
-          <>
-            <div className="text-red-400">{signupMutation.error.message}</div>
-          </>
-        ) : null
-      }
-    />
+          signupMutation.mutate({
+            data: {
+              email: formData.get('email') as string,
+              password: formData.get('password') as string,
+            },
+          });
+        }}
+        afterSubmit={
+          signupMutation.error ? (
+            <>
+              <div className="text-red-400">{signupMutation.error.message}</div>
+            </>
+          ) : null
+        }
+      />
+
+      <hr className="my-4" />
+      <div className="text-center text-sm">or</div>
+      <hr className="my-4" />
+      <div className="flex justify-center">
+        <Link
+          to="/login"
+          className="rounded-sm bg-cyan-600 px-2 py-2 font-black text-sm text-white uppercase hover:bg-cyan-700"
+        >
+          Have an account?
+        </Link>
+      </div>
+    </>
   );
 }
