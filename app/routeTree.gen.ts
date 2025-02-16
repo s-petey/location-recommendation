@@ -16,10 +16,7 @@ import { Route as LogoutImport } from './routes/logout'
 import { Route as LoginImport } from './routes/login'
 import { Route as AuthedImport } from './routes/_authed'
 import { Route as IndexImport } from './routes/index'
-import { Route as AuthedPostsImport } from './routes/_authed/posts'
 import { Route as AuthedCategoryImport } from './routes/_authed/category'
-import { Route as AuthedPostsIndexImport } from './routes/_authed/posts.index'
-import { Route as AuthedPostsPostIdImport } from './routes/_authed/posts.$postId'
 import { Route as AuthedCategoryNameImport } from './routes/_authed/category.$name'
 
 // Create/Update Routes
@@ -53,28 +50,10 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const AuthedPostsRoute = AuthedPostsImport.update({
-  id: '/posts',
-  path: '/posts',
-  getParentRoute: () => AuthedRoute,
-} as any)
-
 const AuthedCategoryRoute = AuthedCategoryImport.update({
   id: '/category',
   path: '/category',
   getParentRoute: () => AuthedRoute,
-} as any)
-
-const AuthedPostsIndexRoute = AuthedPostsIndexImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AuthedPostsRoute,
-} as any)
-
-const AuthedPostsPostIdRoute = AuthedPostsPostIdImport.update({
-  id: '/$postId',
-  path: '/$postId',
-  getParentRoute: () => AuthedPostsRoute,
 } as any)
 
 const AuthedCategoryNameRoute = AuthedCategoryNameImport.update({
@@ -129,33 +108,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedCategoryImport
       parentRoute: typeof AuthedImport
     }
-    '/_authed/posts': {
-      id: '/_authed/posts'
-      path: '/posts'
-      fullPath: '/posts'
-      preLoaderRoute: typeof AuthedPostsImport
-      parentRoute: typeof AuthedImport
-    }
     '/_authed/category/$name': {
       id: '/_authed/category/$name'
       path: '/$name'
       fullPath: '/category/$name'
       preLoaderRoute: typeof AuthedCategoryNameImport
       parentRoute: typeof AuthedCategoryImport
-    }
-    '/_authed/posts/$postId': {
-      id: '/_authed/posts/$postId'
-      path: '/$postId'
-      fullPath: '/posts/$postId'
-      preLoaderRoute: typeof AuthedPostsPostIdImport
-      parentRoute: typeof AuthedPostsImport
-    }
-    '/_authed/posts/': {
-      id: '/_authed/posts/'
-      path: '/'
-      fullPath: '/posts/'
-      preLoaderRoute: typeof AuthedPostsIndexImport
-      parentRoute: typeof AuthedPostsImport
     }
   }
 }
@@ -174,28 +132,12 @@ const AuthedCategoryRouteWithChildren = AuthedCategoryRoute._addFileChildren(
   AuthedCategoryRouteChildren,
 )
 
-interface AuthedPostsRouteChildren {
-  AuthedPostsPostIdRoute: typeof AuthedPostsPostIdRoute
-  AuthedPostsIndexRoute: typeof AuthedPostsIndexRoute
-}
-
-const AuthedPostsRouteChildren: AuthedPostsRouteChildren = {
-  AuthedPostsPostIdRoute: AuthedPostsPostIdRoute,
-  AuthedPostsIndexRoute: AuthedPostsIndexRoute,
-}
-
-const AuthedPostsRouteWithChildren = AuthedPostsRoute._addFileChildren(
-  AuthedPostsRouteChildren,
-)
-
 interface AuthedRouteChildren {
   AuthedCategoryRoute: typeof AuthedCategoryRouteWithChildren
-  AuthedPostsRoute: typeof AuthedPostsRouteWithChildren
 }
 
 const AuthedRouteChildren: AuthedRouteChildren = {
   AuthedCategoryRoute: AuthedCategoryRouteWithChildren,
-  AuthedPostsRoute: AuthedPostsRouteWithChildren,
 }
 
 const AuthedRouteWithChildren =
@@ -208,10 +150,7 @@ export interface FileRoutesByFullPath {
   '/logout': typeof LogoutRoute
   '/signup': typeof SignupRoute
   '/category': typeof AuthedCategoryRouteWithChildren
-  '/posts': typeof AuthedPostsRouteWithChildren
   '/category/$name': typeof AuthedCategoryNameRoute
-  '/posts/$postId': typeof AuthedPostsPostIdRoute
-  '/posts/': typeof AuthedPostsIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -222,8 +161,6 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/category': typeof AuthedCategoryRouteWithChildren
   '/category/$name': typeof AuthedCategoryNameRoute
-  '/posts/$postId': typeof AuthedPostsPostIdRoute
-  '/posts': typeof AuthedPostsIndexRoute
 }
 
 export interface FileRoutesById {
@@ -234,10 +171,7 @@ export interface FileRoutesById {
   '/logout': typeof LogoutRoute
   '/signup': typeof SignupRoute
   '/_authed/category': typeof AuthedCategoryRouteWithChildren
-  '/_authed/posts': typeof AuthedPostsRouteWithChildren
   '/_authed/category/$name': typeof AuthedCategoryNameRoute
-  '/_authed/posts/$postId': typeof AuthedPostsPostIdRoute
-  '/_authed/posts/': typeof AuthedPostsIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -249,10 +183,7 @@ export interface FileRouteTypes {
     | '/logout'
     | '/signup'
     | '/category'
-    | '/posts'
     | '/category/$name'
-    | '/posts/$postId'
-    | '/posts/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -262,8 +193,6 @@ export interface FileRouteTypes {
     | '/signup'
     | '/category'
     | '/category/$name'
-    | '/posts/$postId'
-    | '/posts'
   id:
     | '__root__'
     | '/'
@@ -272,10 +201,7 @@ export interface FileRouteTypes {
     | '/logout'
     | '/signup'
     | '/_authed/category'
-    | '/_authed/posts'
     | '/_authed/category/$name'
-    | '/_authed/posts/$postId'
-    | '/_authed/posts/'
   fileRoutesById: FileRoutesById
 }
 
@@ -318,8 +244,7 @@ export const routeTree = rootRoute
     "/_authed": {
       "filePath": "_authed.tsx",
       "children": [
-        "/_authed/category",
-        "/_authed/posts"
+        "/_authed/category"
       ]
     },
     "/login": {
@@ -338,25 +263,9 @@ export const routeTree = rootRoute
         "/_authed/category/$name"
       ]
     },
-    "/_authed/posts": {
-      "filePath": "_authed/posts.tsx",
-      "parent": "/_authed",
-      "children": [
-        "/_authed/posts/$postId",
-        "/_authed/posts/"
-      ]
-    },
     "/_authed/category/$name": {
       "filePath": "_authed/category.$name.tsx",
       "parent": "/_authed/category"
-    },
-    "/_authed/posts/$postId": {
-      "filePath": "_authed/posts.$postId.tsx",
-      "parent": "/_authed/posts"
-    },
-    "/_authed/posts/": {
-      "filePath": "_authed/posts.index.tsx",
-      "parent": "/_authed/posts"
     }
   }
 }

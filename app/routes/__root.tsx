@@ -3,6 +3,7 @@ import {
   Link,
   Outlet,
   createRootRouteWithContext,
+  useMatch,
 } from '@tanstack/react-router';
 import { Meta, Scripts, createServerFn } from '@tanstack/start';
 import { getWebRequest } from '@tanstack/start/server';
@@ -109,6 +110,18 @@ function RootComponent() {
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   const data = Route.useLoaderData();
+  const matchLogin = useMatch({
+    from: '/login',
+    shouldThrow: false,
+  });
+
+  const matchSignup = useMatch({
+    from: '/signup',
+    shouldThrow: false,
+  });
+
+  const matchesLoginOrSignup =
+    matchLogin?.status === 'success' || matchSignup?.status === 'success';
 
   return (
     <html lang="en">
@@ -116,48 +129,41 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <Meta />
       </head>
       <body>
-        <div className="flex gap-2 p-2 text-lg">
-          <Link
-            to="/"
-            activeProps={{
-              className: 'font-bold',
-            }}
-            activeOptions={{ exact: true }}
-          >
-            Home
-          </Link>{' '}
-          <Link
-            to="/category"
-            activeProps={{
-              className: 'font-bold',
-            }}
-            disabled={!data?.user}
-            className={!data?.user ? 'pointer-events-none opacity-50' : ''}
-          >
-            Category
-          </Link>{' '}
-          <Link
-            to="/posts"
-            activeProps={{
-              className: 'font-bold',
-            }}
-            disabled={!data?.user}
-            className={!data?.user ? 'pointer-events-none opacity-50' : ''}
-          >
-            Posts
-          </Link>{' '}
-          <div className="ml-auto">
-            {data?.user ? (
-              <>
-                <span className="mr-2">{data.user.email}</span>
-                <Link to="/logout">Logout</Link>
-              </>
-            ) : (
-              <Link to="/login">Login</Link>
-            )}
+        {!matchesLoginOrSignup && (
+          <div className="flex gap-2 p-2 text-lg">
+            <Link
+              to="/"
+              activeProps={{
+                className: 'font-bold',
+              }}
+              activeOptions={{ exact: true }}
+            >
+              Home
+            </Link>{' '}
+            <Link
+              to="/category"
+              activeProps={{
+                className: 'font-bold',
+              }}
+              disabled={!data?.user}
+              className={!data?.user ? 'pointer-events-none opacity-50' : ''}
+            >
+              Category
+            </Link>{' '}
+            <div className="ml-auto">
+              {data?.user ? (
+                <>
+                  <span className="mr-2">{data.user.email}</span>
+                  <Link to="/logout">Logout</Link>
+                </>
+              ) : (
+                <Link to="/login">Login</Link>
+              )}
+            </div>
           </div>
-        </div>
+        )}
         <hr />
+
         {children}
 
         {env.DEV_TOOLS && <LazyDevTools />}
