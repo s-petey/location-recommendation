@@ -10,7 +10,7 @@ export function Auth({
   afterSubmit?: React.ReactNode;
 }) {
   return (
-    <div className="fixed inset-0 flex items-start justify-center bg-white p-8 dark:bg-black">
+    <div className="flex items-start justify-center bg-white p-8 dark:bg-black">
       <div className="rounded-lg bg-white p-8 shadow-lg dark:bg-gray-900">
         <h1 className="mb-4 font-bold text-2xl">{actionText}</h1>
         <form
@@ -44,7 +44,7 @@ export function Auth({
           </div>
           <button
             type="submit"
-            className="w-full rounded-sm bg-cyan-600 py-2 font-black text-white uppercase"
+            className="w-full cursor-pointer rounded-sm bg-cyan-600 py-2 font-black text-white uppercase hover:bg-cyan-700 disabled:cursor-not-allowed"
             disabled={status === 'pending'}
           >
             {status === 'pending' ? '...' : actionText}
