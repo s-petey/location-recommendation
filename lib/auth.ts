@@ -6,8 +6,8 @@ import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { env } from './env.js';
 
 const libsql = createClient({
-  url: env.TURSO_DATABASE_URL,
-  authToken: env.TURSO_AUTH_TOKEN,
+  url: env.VITE_TURSO_DATABASE_URL,
+  authToken: env.VITE_TURSO_AUTH_TOKEN,
 });
 
 const adapter = new PrismaLibSQL(libsql);

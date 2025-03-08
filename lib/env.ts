@@ -10,8 +10,8 @@ const envSchema = type({
   BETTER_AUTH_URL: 'string.url',
   VITE_ALLOWED_EMAILS: 'string',
   // PRISMA_LOG_LEVEL: PrismaLogLevels,
-  TURSO_DATABASE_URL: 'string > 1',
-  TURSO_AUTH_TOKEN: 'string > 1',
+  VITE_TURSO_DATABASE_URL: 'string > 1',
+  VITE_TURSO_AUTH_TOKEN: 'string > 1',
 });
 
 const parsed = envSchema({
@@ -21,8 +21,8 @@ const parsed = envSchema({
   VITE_ALLOWED_EMAILS: import.meta.env.VITE_ALLOWED_EMAILS,
   // PRISMA_LOG_LEVEL: import.meta.env.VITE_PRISMA_LOG_LEVEL,
   // TODO: Make the following optional...
-  TURSO_DATABASE_URL: import.meta.env.TURSO_DATABASE_URL,
-  TURSO_AUTH_TOKEN: import.meta.env.TURSO_AUTH_TOKEN,
+  VITE_TURSO_DATABASE_URL: import.meta.env.VITE_TURSO_DATABASE_URL,
+  VITE_TURSO_AUTH_TOKEN: import.meta.env.VITE_TURSO_AUTH_TOKEN,
 });
 
 if (parsed instanceof type.errors) {
