@@ -1,11 +1,13 @@
 import type { QueryClient } from '@tanstack/react-query';
 import {
+  HeadContent,
   Link,
   Outlet,
+  Scripts,
   createRootRouteWithContext,
   useMatch,
 } from '@tanstack/react-router';
-import { Meta, Scripts, createServerFn } from '@tanstack/start';
+import { createServerFn } from '@tanstack/start';
 import { getWebRequest } from '@tanstack/start/server';
 import * as React from 'react';
 import { DefaultCatchBoundary } from '~/components/DefaultCatchBoundary.js';
@@ -126,7 +128,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
-        <Meta />
+        <HeadContent />
       </head>
       <body>
         {!matchesLoginOrSignup && (

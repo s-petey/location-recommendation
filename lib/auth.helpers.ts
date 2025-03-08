@@ -1,6 +1,6 @@
 import type { setCookie } from '@tanstack/start/server';
 import { type } from 'arktype';
-import { parseSetCookieHeader } from 'better-auth';
+import { parseSetCookieHeader } from 'better-auth/cookies';
 
 type CookieOpts = Parameters<typeof setCookie>['3'];
 
