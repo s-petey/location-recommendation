@@ -7,7 +7,13 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "ignore": ["routeTree.gen.ts", "pnpm-lock.yaml", "node_modules"]
+    "ignore": [
+      "routeTree.gen.ts",
+      "pnpm-lock.yaml",
+      "node_modules",
+      ".output",
+      ".vinxi"
+    ]
   },
   "formatter": {
     "enabled": true,
