@@ -42,6 +42,9 @@ export const Route = createFileRoute('/_authed/category/$name')({
   validateSearch: searchboxQuerySchema,
 });
 
+// TODO: Add any information that may be helpful,
+// such as a link, hours, phone number, etc.
+
 function RouteComponent() {
   const routeSearch = Route.useSearch();
   const searchboxQuery = useSuspenseQuery(searchboxQueryOptions(routeSearch));
@@ -88,6 +91,25 @@ const fetchSearchbox = createServerFn({ method: 'GET' })
     return parsed;
   })
   .handler(async ({ data }) => {
+    // TODO: Handle caching somehow (on server we could use some sort of store?)
+    // if (env.NODE_ENV === 'development') {
+    //   const devJson = await import('~/lib/coffee.json');
+    //   const parsed = searchboxSchema(devJson);
+
+    //   const { category, limit, proximity } = data;
+    //   const underscoredCategory = category.replaceAll(' ', '_');
+
+    //   console.log({
+    //     category,
+    //     underscoredCategory,
+    //   });
+
+    //   if (parsed instanceof type.errors) {
+    //     throw new Error(parsed.summary);
+    //   }
+
+    //   return parsed;
+    // }
 
     const { category, radius, limit, proximity } = data;
     const turfPoint = turf.point(proximity);

@@ -10,47 +10,28 @@ on:
 
 jobs:
   check:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        node-version: [22.x]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: Get pnpm cache directory
-        id: pnpm-cache
-        shell: bash
-        run: |
-          echo "::set-output name=dir::$(pnpm store path)"
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
 
-      - uses: actions/cache@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
         with:
-          path: ${{ steps.pnpm-cache.outputs.dir }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm install
 
+      - name: Generate Prisma
+        run: pnpm run prisma:generate
+
       - name: Run check command
         run: pnpm run check
-
-      - name: Comment on PR if check fails
-        if: failure()
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            github.issues.createComment({
-              issue_number: github.context.pullRequest.number,
-              owner: github.context.repo.owner,
-              repo: github.context.repo.repo,
-              body: 'Check failed. Please fix before merging.'
-            })
