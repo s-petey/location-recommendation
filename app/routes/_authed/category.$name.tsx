@@ -75,7 +75,8 @@ function RouteComponent() {
 
 const fetchSearchbox = createServerFn({ method: 'GET' })
   .validator((data: FetchSearchbox) => {
-    console.log({ data });
+    // TODO: Logging
+    // console.log({ data });
 
     const parsed = searchBoxParamsSchema(data);
 
@@ -98,13 +99,15 @@ const fetchSearchbox = createServerFn({ method: 'GET' })
 
     const bbox = turf.bbox(buffer);
 
+    // TODO: Logging
+    // console.log({ bbox });
 
     // The category needs to be an `_` separated string instead of spaces.
     const underscoredCategory = category.replaceAll(' ', '_');
     const fetchUrl = new URL(
       `https://api.mapbox.com/search/searchbox/v1/category/${underscoredCategory}`,
     );
-    // TODO: add access token ENV
+    // TODO: add access token ENV?
     fetchUrl.searchParams.set(
       'access_token',
       'pk.eyJ1Ijoicy1wZXRleSIsImEiOiJjbTZtZWN6ZWcwamd4Mm1wYjI5MGVmYmJrIn0.PvkJ6F2ngc9_iTBBuRB4nw',
@@ -132,6 +135,7 @@ const fetchSearchbox = createServerFn({ method: 'GET' })
 
     const json = await responseData.json();
 
+    // TODO: Logging.
     // console.log({ json });
 
     const parsed = searchboxSchema(json);
