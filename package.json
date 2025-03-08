@@ -20,6 +20,8 @@
     "fix": "biome check --write"
   },
   "dependencies": {
+    "@libsql/client": "^0.14.0",
+    "@prisma/adapter-libsql": "^6.4.1",
     "@prisma/client": "5.22.0",
     "@tanstack/react-query": "^5.66.0",
     "@tanstack/react-query-devtools": "^5.66.0",
