@@ -32,16 +32,3 @@ jobs:
 
       - name: Run check command
         run: pnpm run check
-
-      - name: Comment on PR if check fails
-        if: failure()
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            github.issues.createComment({
-              issue_number: github.context.pullRequest.number,
-              owner: github.context.repo.owner,
-              repo: github.context.repo.repo,
-              body: 'Check failed. Please fix before merging.'
-            })
