@@ -47,10 +47,24 @@ export const Route = createFileRoute('/_authed/category/$name')({
 
 function RouteComponent() {
   const routeSearch = Route.useSearch();
+  const params = Route.useParams();
   const searchboxQuery = useSuspenseQuery(searchboxQueryOptions(routeSearch));
 
   if (searchboxQuery.data === null) {
     return null;
+  }
+
+  if (searchboxQuery.data.features.length === 0) {
+    return (
+      <div className="grid grid-cols-1 gap-4 rounded-lg border border-blue-300 bg-blue-100 p-4 dark:border-blue-400 dark:bg-blue-600">
+        <h2 className="font-bold text-blue-600 dark:text-blue-100">Warning</h2>
+        <p className="text-blue-800 dark:text-blue-200">No results found.</p>
+        <p className="text-blue-800 dark:text-blue-200">
+          You searched for &quot;{params.name}&quot; maybe try something similar
+          without special characters.
+        </p>
+      </div>
+    );
   }
 
   return (
