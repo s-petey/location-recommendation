@@ -87,7 +87,9 @@ const featureSchema = type({
             day: 'number',
             time: 'string',
           }),
-        }).array(),
+        })
+          .array()
+          .optional(),
       }).optional(),
     }),
   }),
