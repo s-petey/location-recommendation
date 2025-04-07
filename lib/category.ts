@@ -82,11 +82,11 @@ const featureSchema = type({
           open: type({
             day: 'number',
             time: 'string',
-          }),
+          }).optional(),
           close: type({
             day: 'number',
             time: 'string',
-          }),
+          }).optional(),
         })
           .array()
           .optional(),

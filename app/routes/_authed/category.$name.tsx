@@ -69,23 +69,29 @@ function RouteComponent() {
 
   return (
     <div className="grid grid-cols-1 gap-4">
-      {searchboxQuery.data.features.map((feature) => (
-        <div
-          key={feature.properties.external_ids.dataplor}
-          className="rounded-lg bg-gray-800 p-4 dark:bg-gray-900 dark:text-white"
-        >
-          <h2 className="font-bold text-lg">{feature.properties.name}</h2>
-          <p>
-            <a
-              href={`https://www.google.com/maps/search/?api=1&query=${feature.properties.address}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {feature.properties.address}
-            </a>
-          </p>
-        </div>
-      ))}
+      {searchboxQuery.data.features.map((feature) => {
+        if (!feature.properties) {
+          // Shouldn't happen filtered above
+          return null;
+        }
+        return (
+          <div
+            key={feature.properties.external_ids.dataplor}
+            className="rounded-lg bg-gray-800 p-4 dark:bg-gray-900 dark:text-white"
+          >
+            <h2 className="font-bold text-lg">{feature.properties.name}</h2>
+            <p>
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${feature.properties.address}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {feature.properties.address}
+              </a>
+            </p>
+          </div>
+        );
+      })}
     </div>
   );
 }
@@ -98,6 +104,7 @@ const fetchSearchbox = createServerFn({ method: 'GET' })
     const parsed = searchBoxParamsSchema(data);
 
     if (parsed instanceof type.errors) {
+      console.log('Tried to collect: ', data)
       console.error('parseError: ', parsed.summary);
       throw new Error(parsed.summary);
     }
