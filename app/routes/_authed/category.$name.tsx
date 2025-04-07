@@ -104,7 +104,7 @@ const fetchSearchbox = createServerFn({ method: 'GET' })
     const parsed = searchBoxParamsSchema(data);
 
     if (parsed instanceof type.errors) {
-      console.log('Tried to collect: ', data)
+      console.log('Tried to collect: ', data);
       console.error('parseError: ', parsed.summary);
       throw new Error(parsed.summary);
     }
