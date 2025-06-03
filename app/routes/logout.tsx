@@ -1,6 +1,10 @@
 import { createFileRoute, redirect } from '@tanstack/react-router';
-import { createServerFn } from '@tanstack/start';
-import { getEvent, getWebRequest, setCookie } from '@tanstack/start/server';
+import { createServerFn } from '@tanstack/react-start';
+import {
+  getEvent,
+  getWebRequest,
+  setCookie,
+} from '@tanstack/react-start/server';
 import { auth } from '~/lib/auth';
 import { createCookieForServerAuth } from '~/lib/auth.helpers';
 

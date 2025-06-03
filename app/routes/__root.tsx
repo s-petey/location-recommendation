@@ -7,8 +7,8 @@ import {
   createRootRouteWithContext,
   useMatch,
 } from '@tanstack/react-router';
-import { createServerFn } from '@tanstack/start';
-import { getWebRequest } from '@tanstack/start/server';
+import { createServerFn } from '@tanstack/react-start';
+import { getWebRequest } from '@tanstack/react-start/server';
 import * as React from 'react';
 import { DefaultCatchBoundary } from '~/components/DefaultCatchBoundary.js';
 import { NotFound } from '~/components/NotFound.js';
@@ -182,7 +182,7 @@ const ReactQueryDevtoolsProduction = React.lazy(() =>
 );
 
 const TanStackRouterDevtoolsProduction = React.lazy(() =>
-  import('@tanstack/router-devtools').then((d) => ({
+  import('@tanstack/react-router-devtools').then((d) => ({
     default: d.TanStackRouterDevtools,
   })),
 );
