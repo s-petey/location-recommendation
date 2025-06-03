@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { Link, createFileRoute, useRouter } from '@tanstack/react-router';
-import { createServerFn } from '@tanstack/start';
-import { getEvent, setCookie } from '@tanstack/start/server';
+import { createServerFn } from '@tanstack/react-start';
+import { getEvent, setCookie } from '@tanstack/react-start/server';
 import { type } from 'arktype';
 import { Auth } from '~/components/Auth.jsx';
 import {
