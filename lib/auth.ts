@@ -8,7 +8,6 @@ const adapter = new PrismaLibSQL({
   url: env.VITE_TURSO_DATABASE_URL,
   authToken: env.VITE_TURSO_AUTH_TOKEN,
 });
-// @ts-expect-error Adapter type isn't matching?
 const prisma = new PrismaClient({ adapter });
 
 export const auth = betterAuth({
