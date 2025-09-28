@@ -1,13 +1,13 @@
 import { authClient } from "@/lib/auth-client";
 import { useLogoutMutation } from "@/lib/useLogout";
 import { Link, useMatch, useRouter } from "@tanstack/react-router";
-import { useTheme } from "@/integrations/tanstack-query/root-provider";
+import { useTheme } from "./ThemeProvider";
 
 export default function Header() {
 	const router = useRouter();
 	const { data } = authClient.useSession();
 	const { mutate } = useLogoutMutation(router);
-	const { theme, toggleTheme } = useTheme();
+	const { userTheme, setTheme } = useTheme();
 
 	const matchLogin = useMatch({
 		from: "/login",
@@ -76,38 +76,45 @@ export default function Header() {
 						</div>
 					</div>
 				)}
+
+				{/* {typeof theme === "string" && ( */}
 				<button
-					onClick={toggleTheme}
+					onClick={() => setTheme(userTheme === "dark" ? "light" : "dark")}
 					className="ml-4 flex items-center justify-center rounded-full p-2 transition-colors bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700"
 					aria-label="Toggle dark mode"
 					type="button"
 				>
-					{theme === "dark" ? (
+					{userTheme === "dark" && (
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							className="h-5 w-5 text-yellow-400"
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke="currentColor"
+							suppressHydrationWarning
 						>
-							<title>Light Mode</title>
+							<title suppressHydrationWarning>Light Mode</title>
 							<path
+								suppressHydrationWarning
 								strokeLinecap="round"
 								strokeLinejoin="round"
 								strokeWidth={2}
 								d="M12 3v1m0 16v1m8.66-13.66l-.71.71M4.05 19.95l-.71.71M21 12h-1M4 12H3m16.66 5.66l-.71-.71M4.05 4.05l-.71-.71M16 12a4 4 0 11-8 0 4 4 0 018 0z"
 							/>
 						</svg>
-					) : (
+					)}
+					{userTheme === "light" && (
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							className="h-5 w-5 text-gray-700 dark:text-gray-200"
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke="currentColor"
+							suppressHydrationWarning
 						>
-							<title>Dark Mode</title>
+							<title suppressHydrationWarning>Dark Mode</title>
 							<path
+								suppressHydrationWarning
 								strokeLinecap="round"
 								strokeLinejoin="round"
 								strokeWidth={2}
@@ -116,6 +123,7 @@ export default function Header() {
 						</svg>
 					)}
 				</button>
+				{/* )} */}
 			</nav>
 		</header>
 	);

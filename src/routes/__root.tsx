@@ -11,6 +11,7 @@ import appCss from "../styles.css?url";
 import { DefaultCatchBoundary } from "@/components/DefaultCatchBoundary";
 import Header from "@/components/Header";
 import { NotFound } from "@/components/NotFound";
+import { ThemeProvider } from "@/components/ThemeProvider";
 import { env } from "@/lib/env";
 import { seo } from "@/lib/seo";
 import type { QueryClient } from "@tanstack/react-query";
@@ -63,7 +64,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 				rel: "shortcut icon",
 				href: "/favicon.ico",
 			},
-			{ rel: "manifest", href: "/site.webmanifest", color: "#fffff" },
+			{ rel: "manifest", href: "/manifest.json", color: "#fffff" },
 			{ rel: "icon", href: "/favicon.ico" },
 		],
 	}),
@@ -82,35 +83,19 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 function RootComponent() {
 	return (
 		<StrictMode>
-			<RootDocument>
-				<Outlet />
-			</RootDocument>
+			<ThemeProvider>
+				<RootDocument>
+					<Outlet />
+				</RootDocument>
+			</ThemeProvider>
 		</StrictMode>
 	);
 }
 
 function RootDocument({ children }: { children: ReactNode }) {
 	return (
-		<html lang="en">
+		<html lang="en" suppressHydrationWarning>
 			<head>
-				<script
-					// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
-					dangerouslySetInnerHTML={{
-						__html: `
-(function() {
-  try {
-    var theme = localStorage.getItem('theme');
-    if (!theme) {
-      theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    }
-    document.documentElement.classList.remove('light', 'dark');
-    document.documentElement.classList.add(theme);
-    document.cookie = 'theme=' + theme + '; path=/; max-age=31536000';
-  } catch (e) {}
-})();
-`,
-					}}
-				/>
 				<HeadContent />
 			</head>
 			<body className="min-h-screen bg-white dark:bg-gray-900 text-black dark:text-white transition-colors">
