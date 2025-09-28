@@ -91,11 +91,9 @@ export default function Header() {
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke="currentColor"
-							suppressHydrationWarning
 						>
-							<title suppressHydrationWarning>Light Mode</title>
+							<title>Light Mode</title>
 							<path
-								suppressHydrationWarning
 								strokeLinecap="round"
 								strokeLinejoin="round"
 								strokeWidth={2}
@@ -110,11 +108,9 @@ export default function Header() {
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke="currentColor"
-							suppressHydrationWarning
 						>
-							<title suppressHydrationWarning>Dark Mode</title>
+							<title>Dark Mode</title>
 							<path
-								suppressHydrationWarning
 								strokeLinecap="round"
 								strokeLinejoin="round"
 								strokeWidth={2}
