@@ -2,7 +2,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
 import { type } from "arktype";
-import { auth } from "./auth";
+import { auth } from "./auth.js";
 // import { parseSetCookieHeader } from 'better-auth/cookies';
 
 // type CookieOpts = Parameters<typeof setCookie>['3'];

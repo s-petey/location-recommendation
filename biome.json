@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.2.4/schema.json",
   "vcs": {
     "enabled": false,
     "clientKind": "git",
@@ -7,25 +7,55 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "ignore": ["src/routeTree.gen.ts"],
-    "include": ["src/*", ".vscode/*", "index.html", "vite.config.js"]
+    "includes": [
+      "**/*.ts",
+      "src/*",
+      "!src/routeTree.gen.ts",
+      "!.nitro",
+      "!.output",
+      ".vscode/*",
+      "index.html",
+      "vite.config.ts"
+    ]
   },
   "formatter": {
     "enabled": true,
     "indentStyle": "tab"
   },
-  "organizeImports": {
-    "enabled": true
-  },
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true
+      "recommended": true,
+      "correctness": {
+        "useImportExtensions": {
+          "level": "error",
+          "options": {
+            "forceJsExtensions": true
+          }
+        }
+      },
+      "nursery": {
+        "useSortedClasses": {
+          "fix": "safe",
+          "options": {},
+          "level": "error"
+        }
+      }
     }
   },
   "javascript": {
+    "linter": {
+      "enabled": true
+    },
     "formatter": {
       "quoteStyle": "double"
+    }
+  },
+  "json": {
+    "formatter": {
+      "enabled": true,
+      "indentStyle": "space",
+      "indentWidth": 2
     }
   }
 }

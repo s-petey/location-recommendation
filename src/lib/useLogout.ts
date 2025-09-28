@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import type { useRouter } from "@tanstack/react-router";
-import { authClient } from "./auth-client";
+import { authClient } from "./auth-client.js";
 
 export function useLogoutMutation(router: ReturnType<typeof useRouter>) {
 	return useMutation({

@@ -1,8 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
 import type { useRouter } from "@tanstack/react-router";
 import { type } from "arktype";
-import { authClient } from "./auth-client";
-import { emailAuthSchema } from "./auth.helpers";
+import { emailAuthSchema } from "./auth.helpers.js";
+import { authClient } from "./auth-client.js";
 
 export function useSignupMutation(router: ReturnType<typeof useRouter>) {
 	return useMutation({
