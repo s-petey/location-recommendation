@@ -1,24 +1,19 @@
-import { TanStackDevtools } from "@tanstack/react-devtools";
 import {
 	HeadContent,
 	Outlet,
 	Scripts,
 	createRootRouteWithContext,
 } from "@tanstack/react-router";
-import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
-
-import Header from "../components/Header";
-
-import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
+import { type ReactNode, StrictMode, Suspense, lazy } from "react";
 
 import appCss from "../styles.css?url";
 
 import { DefaultCatchBoundary } from "@/components/DefaultCatchBoundary";
+import Header from "@/components/Header";
 import { NotFound } from "@/components/NotFound";
 import { env } from "@/lib/env";
 import { seo } from "@/lib/seo";
 import type { QueryClient } from "@tanstack/react-query";
-import { StrictMode } from "react";
 
 interface MyRouterContext {
 	queryClient: QueryClient;
@@ -94,7 +89,7 @@ function RootComponent() {
 	);
 }
 
-function RootDocument({ children }: { children: React.ReactNode }) {
+function RootDocument({ children }: { children: ReactNode }) {
 	return (
 		<html lang="en">
 			<head>
@@ -105,18 +100,17 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 				{children}
 
 				{env.DEV_TOOLS && (
-					<TanStackDevtools
-						config={{
-							position: "bottom-left",
-						}}
-						plugins={[
-							{
-								name: "Tanstack Router",
-								render: <TanStackRouterDevtoolsPanel />,
-							},
-							TanStackQueryDevtools,
-						]}
-					/>
+					<Suspense fallback={null}>
+						<TanStackDevtools
+							config={{
+								position: "bottom-left",
+							}}
+							plugins={[
+								TanStackRouterDevtoolsPlugin,
+								TanStackQueryDevtoolsPlugin,
+							]}
+						/>
+					</Suspense>
 				)}
 
 				<Scripts />
@@ -124,3 +118,39 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 		</html>
 	);
 }
+
+// Lazy load devtools
+const TanStackDevtools = lazy(() =>
+	import("@tanstack/react-devtools").then((m) => ({
+		default: m.TanStackDevtools,
+	})),
+);
+const TanStackRouterDevtoolsPanel = lazy(() =>
+	import("@tanstack/react-router-devtools").then((m) => ({
+		default: m.TanStackRouterDevtoolsPanel,
+	})),
+);
+
+// Plugin wrappers for lazy loading
+const TanStackRouterDevtoolsPlugin = {
+	name: "Tanstack Router",
+	render: (
+		<Suspense fallback={null}>
+			<TanStackRouterDevtoolsPanel />
+		</Suspense>
+	),
+};
+const TanStackQueryDevtoolsPanel = lazy(() =>
+	import("@tanstack/react-query-devtools").then((m) => ({
+		default: m.ReactQueryDevtoolsPanel,
+	})),
+);
+
+const TanStackQueryDevtoolsPlugin = {
+	name: "Tanstack Query",
+	render: (
+		<Suspense fallback={null}>
+			<TanStackQueryDevtoolsPanel />
+		</Suspense>
+	),
+};
