@@ -56,7 +56,7 @@ function RouteComponent() {
 
 	if (searchboxQuery.data.features.length === 0) {
 		return (
-			<div className="grid grid-cols-1 gap-4 rounded-lg border border-blue-300 bg-blue-100 p-4 dark:border-blue-400 dark:bg-blue-600">
+			<div className="grid grid-cols-1 gap-4 rounded-lg border border-blue-300 bg-blue-100 p-4 text-blue-900 dark:border-blue-400 dark:bg-blue-600 dark:text-blue-100">
 				<h2 className="font-bold text-blue-600 dark:text-blue-100">Warning</h2>
 				<p className="text-blue-800 dark:text-blue-200">No results found.</p>
 				<p className="text-blue-800 dark:text-blue-200">
@@ -77,7 +77,7 @@ function RouteComponent() {
 				return (
 					<div
 						key={feature.properties.external_ids.dataplor}
-						className="rounded-lg bg-gray-800 p-4 dark:bg-gray-900 dark:text-white"
+						className="rounded-lg bg-white p-4 text-black dark:bg-gray-900 dark:text-white"
 					>
 						<h2 className="font-bold text-lg">{feature.properties.name}</h2>
 						<p>
