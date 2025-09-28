@@ -93,9 +93,27 @@ function RootDocument({ children }: { children: ReactNode }) {
 	return (
 		<html lang="en">
 			<head>
+				<script
+					// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
+					dangerouslySetInnerHTML={{
+						__html: `
+(function() {
+  try {
+    var theme = localStorage.getItem('theme');
+    if (!theme) {
+      theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    document.documentElement.classList.remove('light', 'dark');
+    document.documentElement.classList.add(theme);
+    document.cookie = 'theme=' + theme + '; path=/; max-age=31536000';
+  } catch (e) {}
+})();
+`,
+					}}
+				/>
 				<HeadContent />
 			</head>
-			<body>
+			<body className="min-h-screen bg-white dark:bg-gray-900 text-black dark:text-white transition-colors">
 				<Header />
 				{children}
 

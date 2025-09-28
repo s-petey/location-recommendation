@@ -7,12 +7,16 @@ export const Route = createFileRoute("/login")({
 });
 
 function LoginComp() {
+	// Consistent styling wrapper for login page
+	// Uses same card and background as index/NotFound
+
 	const router = useRouter();
 	const { mutate, status, error } = useLoginMutation(router);
 
 	return (
-		<>
-			<Auth
+		<div className="flex flex-col items-center justify-center min-h-[60vh] bg-white dark:bg-gray-900 text-black dark:text-white">
+			<div className="p-6 rounded-lg shadow-lg bg-white dark:bg-gray-800 w-full max-w-md">
+				<Auth
 				actionText="Login"
 				status={status}
 				onSubmit={(e) => {
@@ -70,6 +74,7 @@ function LoginComp() {
 					Sign up instead?
 				</Link>
 			</div>
-		</>
+			</div>
+		</div>
 	);
 }
