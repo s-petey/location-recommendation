@@ -3,20 +3,20 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite dev --port 3000",
-    "start": "node .output/server/index.mjs",
-    "build": "vite build",
-    "serve": "vite preview",
-    "test": "vitest run",
-    "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate dev",
-    "prisma:studio": "prisma studio",
-    "check": "biome check && tsc --noEmit",
-    "check:types": "tsc --noEmit",
-    "lint": "biome lint",
-    "lint:fix": "biome lint --write",
-    "format": "biome format --write",
-    "fix": "biome check --write"
+    "dev": "bunx --bun vite dev --port 3000",
+    "start": "bun .output/server/index.mjs",
+    "build": "bunx --bun vite build",
+    "serve": "bunx --bun vite preview",
+    "test": "bunx --bun vitest run",
+    "prisma:generate": "bunx prisma generate",
+    "prisma:migrate": "bunx prisma migrate dev",
+    "prisma:studio": "bunx prisma studio",
+    "check": "bunx --bun biome check && bunx --bun tsc --noEmit",
+    "check:types": "bunx --bun tsc --noEmit",
+    "lint": "bunx --bun biome lint",
+    "lint:fix": "bunx --bun biome lint --write",
+    "format": "bunx --bun biome format --write",
+    "fix": "bunx --bun biome check --write"
   },
   "dependencies": {
     "@libsql/client": "^0.15.15",
@@ -56,7 +56,7 @@
     "web-vitals": "^5.1.0"
   },
   "engines": {
-    "node": ">=22.17.0"
+    "bun": ">=1.2.23"
   },
-  "packageManager": "pnpm@10.9.0"
+  "packageManager": "bun@1.2.23"
 }
